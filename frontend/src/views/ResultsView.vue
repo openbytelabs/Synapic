@@ -439,7 +439,7 @@ const wiki = ref({});
 const aiResponseText = ref('');
 const aiLoading = ref(false);
 
-const API_BASE_URL = 'https://consus-search.yigitkabak.workers.dev/api/search'; 
+const API_BASE_URL = 'http://api.synapic.com.tr/api/search'; 
 
 const showCalculator = ref(false);
 const calculatorDisplay = ref('0');
