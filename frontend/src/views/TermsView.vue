@@ -248,7 +248,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         <div class="section-separator"></div>
 
         <p class="section-text">
-          Last updated: January 2025
+          Last updated: 21 January 2025
         </p>
 
         <div class="tech-credits">
