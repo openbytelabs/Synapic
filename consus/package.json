@@ -14,10 +14,7 @@
     "dotenv": "^17.2.3",
     "express": "^4.22.1",
     "express-rate-limit": "^8.2.1",
-    "jsdom": "^27.3.0",
-    "puppeteer": "^21.11.0",
-    "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2"
+    "jsdom": "^27.3.0"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.35",
