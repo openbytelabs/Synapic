@@ -439,7 +439,7 @@ const wiki = ref({});
 const aiResponseText = ref('');
 const aiLoading = ref(false);
 
-const API_BASE_URL = 'http://api.synapic.com.tr/api/search'; 
+const API_BASE_URL = 'https://api.synapic.com.tr/api/search'; 
 
 const showCalculator = ref(false);
 const calculatorDisplay = ref('0');
@@ -564,7 +564,7 @@ const fetchAiResponse = async (query) => {
 const selectPlace = (place) => {
     activePlace.value = place;
     if (place.lat && place.lon) {
-         currentMapUrl.value = `https://maps.google.com/maps?q=${place.lat},${place.lon}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+      currentMapUrl.value = `https://maps.google.com/maps?q=${place.lat},${place.lon}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
     } else {
          const encodedQuery = encodeURIComponent(`${place.title}, ${place.address}`);
          currentMapUrl.value = `https://maps.google.com/maps?q=${encodedQuery}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
