@@ -15,13 +15,13 @@
     <main class="main-content">
       <div class="search-bar-container">
         <form aria-label="Search form" class="search-form" @submit.prevent="handleSearch">
-          <label class="sr-only" for="search-results">Search</label>
+          <label class="sr-only" for="search-results">Ara</label>
           <div class="search-input-wrapper">
             <input 
               class="search-input"
               id="search-results" 
               name="query" 
-              placeholder="Let's get it ..."
+              placeholder="Aklında ne var?"
               type="search" 
               v-model="searchQuery"
               @focus="showHistory = true"
@@ -58,10 +58,10 @@
 
       <div class="search-options-bar">
         <a href="#" @click.prevent="switchTab('web')" class="search-option-item" :class="{ 'selected': currentType === 'web' }">Web</a>
-        <a href="#" @click.prevent="switchTab('image')" class="search-option-item" :class="{ 'selected': currentType === 'image' }">Images</a>
-        <a href="#" @click.prevent="switchTab('video')" class="search-option-item" :class="{ 'selected': currentType === 'video' }">Videos</a>
-        <a href="#" @click.prevent="switchTab('news')" class="search-option-item" :class="{ 'selected': currentType === 'news' }">News</a>
-        <a href="#" @click.prevent="switchTab('maps')" class="search-option-item" :class="{ 'selected': currentType === 'maps' }">Maps</a>
+        <a href="#" @click.prevent="switchTab('image')" class="search-option-item" :class="{ 'selected': currentType === 'image' }">Resimler</a>
+        <a href="#" @click.prevent="switchTab('video')" class="search-option-item" :class="{ 'selected': currentType === 'video' }">Videolar</a>
+        <a href="#" @click.prevent="switchTab('news')" class="search-option-item" :class="{ 'selected': currentType === 'news' }">Haberler</a>
+        <a href="#" @click.prevent="switchTab('maps')" class="search-option-item" :class="{ 'selected': currentType === 'maps' }">Haritalar</a>
       </div>
 
       <div class="error-message" v-if="errorMessage">
@@ -76,7 +76,7 @@
               <div class="ai-icon-wrapper">
                 <i class="fas fa-robot"></i>
               </div>
-              <span class="ai-title">Synapic AI Overview</span>
+              <span class="ai-title">Synapic AI Sonuçları</span>
             </div>
             
             <div v-if="aiLoading" class="ai-loading-container">
@@ -97,7 +97,7 @@
           </div>
           
           <div v-if="showCalculator && currentType !== 'maps'" class="calculator-widget result-card">
-            <h2 class="widget-title"><i class="fas fa-calculator"></i> Calculator</h2>
+            <h2 class="widget-title"><i class="fas fa-calculator"></i> Hesap Makinesi</h2>
             <div class="calculator-display">{{ calculatorDisplay }}</div>
             <div class="calculator-grid">
               <button @click="appendChar('(')" class="btn-op">(</button>
@@ -130,7 +130,7 @@
           <div v-if="showWeatherWidget && weatherData && currentType !== 'maps'" class="weather-widget result-card">
             <h2 class="widget-title">
               <i class="fas fa-cloud-sun"></i> 
-              Weather - {{ weatherData.city }}
+              Hava Durumu - {{ weatherData.city }}
             </h2>
             <div class="weather-content">
               <div class="weather-main-info">
@@ -143,17 +143,17 @@
                 <p class="condition-text">{{ weatherData.condition }}</p>
                 <div class="detail-row">
                   <i class="fas fa-thermometer-half"></i> 
-                  <span>Feels Like:</span> 
+                  <span>Hıssedilen Sıcaklık:</span> 
                   <strong>{{ weatherData.feelsLikeC }}°C</strong>
                 </div>
                 <div class="detail-row">
                   <i class="fas fa-wind"></i> 
-                  <span>Wind:</span> 
+                  <span>Rüzgar:</span> 
                   <strong>{{ weatherData.windKph }} km/h</strong>
                 </div>
                 <div class="detail-row">
                   <i class="fas fa-tint"></i> 
-                  <span>Humidity:</span> 
+                  <span>Nem:</span> 
                   <strong>%{{ weatherData.humidity }}</strong>
                 </div>
               </div>
@@ -174,7 +174,7 @@
           </template>
 
           <template v-else-if="currentType === 'image' && images.length > 0">
-            <h2 class="section-title">Image Results</h2>
+            <h2 class="section-title">Resim Sonuçları</h2>
             <div class="image-results-container">
               <div class="image-grid">
                 <div 
@@ -193,7 +193,7 @@
           </template>
 
           <template v-else-if="currentType === 'video' && videos.length > 0">
-            <h2 class="section-title">Video Results</h2>
+            <h2 class="section-title">Video Sonuçları</h2>
             <div class="video-grid">
               <div v-for="(video, index) in videos" :key="index" class="video-card">
                 <a :href="video.url" target="_blank" rel="noopener noreferrer" class="video-thumbnail-link">
@@ -210,7 +210,7 @@
           </template>
 
           <template v-else-if="currentType === 'news' && newsResults.length > 0">
-            <h2 class="section-title">News Results</h2>
+            <h2 class="section-title">Haberler Sonuçları</h2>
             <div class="news-list">
               <div v-for="(news, index) in newsResults" :key="index" class="news-card">
                 <img v-if="news.image" :src="news.image" :alt="news.title" class="news-thumbnail">
@@ -250,10 +250,10 @@
                 <a :href="wiki.link" target="_blank" rel="noopener noreferrer">{{ wiki.title }}</a>
               </h2>
               <p class="wiki-summary">{{ wiki.summary }}</p>
-              <a :href="wiki.link" target="_blank" rel="noopener noreferrer" class="wiki-source">Source: Wikipedia</a>
+              <a :href="wiki.link" target="_blank" rel="noopener noreferrer" class="wiki-source">Kaynak: Wikipedia</a>
             </div>
             <div v-else class="no-results">
-              <p class="no-results-title">No Wikipedia result found for "{{ searchQuery }}".</p>
+              <p class="no-results-title">"{{ searchQuery }}" için Wikipedia Sonucu Bulunamadı.</p>
             </div>
           </template>
 
@@ -277,16 +277,124 @@
         <i class="fas fa-xmark"></i>
       </button>
       <div class="overlay-panel">
-        <h2 class="overlay-title">Control Center</h2>
+        <h2 class="overlay-title">Kontrol Merkezi</h2>
         <div class="menu-container">
           <a href="#" @click.prevent="openOverlay('searchOptions')" class="menu-item">
             <i class="fas fa-gear"></i>
-            <span>Search Options</span>
+            <span>Arama Seçenekleri</span>
           </a>
           <a href="/terms" class="menu-item">
             <i class="fa-solid fa-lock"></i>
-            <span>Privacy & Terms</span>
+            <span>Gizlilik & Kurallar</span>
             </a>
+            <select class="custom-select" v-model="currentLang">
+              <option value="tr">Turkish</option>
+<option value="en">English</option>
+<option value="de">Deutsch</option>
+<option value="fr">Français</option>
+<option value="es">Español</option>
+<option value="it">Italiano</option>
+<option value="pt">Português</option>
+<option value="ru">Русский</option>
+<option value="ar">العربية</option>
+<option value="zh">中文</option>
+<option value="ja">日本語</option>
+<option value="ko">한국어</option>
+<option value="nl">Nederlands</option>
+<option value="sv">Svenska</option>
+<option value="pl">Polski</option>
+<option value="cs">Čeština</option>
+<option value="da">Dansk</option>
+<option value="fi">Suomi</option>
+<option value="no">Norsk</option>
+<option value="el">Ελληνικά</option>
+<option value="hu">Magyar</option>
+<option value="ro">Română</option>
+<option value="bg">Български</option>
+<option value="uk">Українська</option>
+<option value="he">עברית</option>
+<option value="fa">فارسی</option>
+<option value="hi">हिन्दी</option>
+<option value="ur">اردو</option>
+<option value="bn">বাংলা</option>
+<option value="ta">தமிழ்</option>
+<option value="te">తెలుగు</option>
+<option value="ml">മലയാളം</option>
+<option value="th">ไทย</option>
+<option value="vi">Tiếng Việt</option>
+<option value="id">Bahasa Indonesia</option>
+<option value="ms">Bahasa Melayu</option>
+<option value="tl">Filipino</option>
+<option value="sw">Kiswahili</option>
+<option value="af">Afrikaans</option>
+<option value="sq">Shqip</option>
+<option value="hr">Hrvatski</option>
+<option value="sr">Српски</option>
+<option value="sk">Slovenčina</option>
+<option value="sl">Slovenščina</option>
+<option value="et">Eesti</option>
+<option value="lv">Latviešu</option>
+<option value="lt">Lietuvių</option>
+<option value="is">Íslenska</option>
+<option value="ga">Gaeilge</option>
+<option value="cy">Cymraeg</option>
+<option value="eu">Euskara</option>
+<option value="ca">Català</option>
+<option value="gl">Galego</option>
+<option value="mt">Malti</option>
+<option value="lb">Lëtzebuergesch</option>
+<option value="mk">Македонски</option>
+<option value="ka">ქართული</option>
+<option value="hy">Հայերեն</option>
+<option value="az">Azərbaycan</option>
+<option value="kk">Қазақша</option>
+<option value="uz">Oʻzbek</option>
+<option value="ky">Кыргызча</option>
+<option value="mn">Монгол</option>
+<option value="ne">नेपाली</option>
+<option value="si">සිංහල</option>
+<option value="my">မြန်မာ</option>
+<option value="km">ខ្មែរ</option>
+<option value="lo">ລາວ</option>
+<option value="am">አማርኛ</option>
+<option value="zu">isiZulu</option>
+<option value="xh">isiXhosa</option>
+<option value="st">Sesotho</option>
+<option value="tn">Setswana</option>
+<option value="ts">Xitsonga</option>
+<option value="ss">SiSwati</option>
+<option value="ve">Tshivenda</option>
+<option value="nr">isiNdebele</option>
+<option value="so">Soomaali</option>
+<option value="ha">Hausa</option>
+<option value="ig">Igbo</option>
+<option value="yo">Yorùbá</option>
+<option value="ee">Eʋegbe</option>
+<option value="rw">Kinyarwanda</option>
+<option value="rn">Kirundi</option>
+<option value="ny">Chichewa</option>
+<option value="mg">Malagasy</option>
+<option value="mi">Māori</option>
+<option value="sm">Gagana Samoa</option>
+<option value="to">Lea Faka-Tonga</option>
+<option value="fj">Vosa Vakaviti</option>
+<option value="pa">ਪੰਜਾਬੀ</option>
+<option value="gu">ગુજરાતી</option>
+<option value="mr">मराठी</option>
+<option value="kn">ಕನ್ನಡ</option>
+<option value="or">ଓଡ଼ିଆ</option>
+<option value="as">অসমীয়া</option>
+<option value="sa">संस्कृतम्</option>
+<option value="bo">བོད་ཡིག</option>
+<option value="ug">ئۇيغۇرچە</option>
+<option value="tt">Татарча</option>
+</select>
+
+<button type="button" class="translate-action-btn" @click="runPageTranslation()">
+  <i class="fas fa-language"></i> Çeviriyi Uygula
+</button>
+
+<div id="google_translate_element" style="display:none !important;"></div>
         </div>
       </div>
     </div>
@@ -296,17 +404,17 @@
         <i class="fas fa-times"></i>
       </button>
       <div class="overlay-panel">
-        <h2 class="overlay-title">Search Options</h2>
+        <h2 class="overlay-title">Arama Seçenekleri</h2>
         <div class="options-content">
           <div class="menu-item option-row">
-            <label for="locationBased">Location-Based Results</label>
+            <label for="locationBased">Lokal-Tabanlı Arama</label>
             <label class="toggle-switch">
               <input type="checkbox" id="locationBased" v-model="settings.locationBased">
               <span class="slider"></span>
             </label>
           </div>
           <div class="menu-item option-row">
-            <label for="languageSelect">Language:</label>
+            <label for="languageSelect">Dil:</label>
             <select id="languageSelect" v-model="settings.language" class="custom-select">
               <option value="tr">Turkish</option>
 <option value="de">Deutsch</option>
@@ -340,7 +448,7 @@
 <option value="za">English (ZA)</option>
             </select>
           </div>
-          <button class="save-settings-btn" @click="saveSettings">Save Settings</button>
+          <button class="save-settings-btn" @click="saveSettings">Ayarları Kaydet</button>
         </div>
       </div>
     </div>
@@ -350,7 +458,7 @@
         <i class="fas fa-xmark"></i>
       </button>
       <div class="modal-content">
-        <h2 class="modal-title">Quick Search</h2>
+        <h2 class="modal-title">Hızlı Arama</h2>
         <form aria-label="Quick search form" class="quick-search-form" @submit.prevent="handleQuickSearch">
           <div class="quick-search-wrapper">
             <input 
@@ -370,23 +478,23 @@
         <nav class="quick-links">
           <a href="#" @click.prevent="setQuickSearchType('web')" class="quick-link">
             <i class="fas fa-globe active-icon"></i>
-            <span class="link-text">Search Web</span>
+            <span class="link-text">Web'de Ara</span>
           </a>
           <a href="#" @click.prevent="setQuickSearchType('image')" class="quick-link">
             <i class="fas fa-image active-icon"></i>
-            <span class="link-text">Search Images</span>
+            <span class="link-text">Resimlerde Ara</span>
           </a>
           <a href="#" @click.prevent="setQuickSearchType('news')" class="quick-link">
             <i class="fas fa-newspaper active-icon"></i>
-            <span class="link-text">Search News</span>
+            <span class="link-text">Haberlerde Ara</span>
           </a>
           <a href="#" @click.prevent="setQuickSearchType('maps')" class="quick-link">
             <i class="fa-sharp fa-solid fa-map-location active-icon"></i>
-            <span class="link-text">Search Maps</span>
+            <span class="link-text">Haritalarda Ara</span>
           </a>
           <a href="#" @click.prevent="setQuickSearchType('video')" class="quick-link">
             <i class="fas fa-video active-icon"></i>
-            <span class="link-text">Search Videos</span>
+            <span class="link-text">Videolarda Ara</span>
           </a>
         </nav>
       </div>
@@ -397,6 +505,35 @@
 <script setup>
 import { ref, onMounted, computed, nextTick } from 'vue'; 
 import markdownit from 'markdown-it';
+
+const currentLang = ref('tr');
+
+const loadGoogleTranslate = () => {
+  if (!window.google || !window.google.translate) {
+    const script = document.createElement('script');
+    script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    document.head.appendChild(script);
+  }
+};
+
+window.googleTranslateElementInit = () => {
+  new window.google.translate.TranslateElement({
+    pageLanguage: 'tr',
+    autoDisplay: false
+  }, 'google_translate_element');
+};
+
+const runPageTranslation = (langCode) => {
+  const lang = langCode || currentLang.value;
+  localStorage.setItem('synapicSearchLang', lang);
+  const cookieValue = `/tr/${lang}`;
+  const expires = "; expires=" + new Date(Date.now() + 86400000).toUTCString();
+
+  document.cookie = `googtrans=${cookieValue}${expires}; path=/`;
+  document.cookie = `googtrans=${cookieValue}${expires}; path=/; domain=${window.location.hostname}`;
+  
+  window.location.reload();
+};
 
 const md = markdownit({
   html: true,
@@ -648,11 +785,11 @@ const handleSearch = () => {
 const setQuickSearchType = (type) => {
   quickSearchType.value = type;
   switch (type) {
-    case 'web': quickSearchPlaceholder.value = "Search the web..."; break;
-    case 'image': quickSearchPlaceholder.value = "Search images..."; break;
-    case 'news': quickSearchPlaceholder.value = "Search news..."; break;
-    case 'video': quickSearchPlaceholder.value = "Search videos..."; break;
-    default: quickSearchPlaceholder.value = "Search...";
+    case 'web': quickSearchPlaceholder.value = "Webde Ara..."; break;
+    case 'image': quickSearchPlaceholder.value = "Resimlerde Ara..."; break;
+    case 'news': quickSearchPlaceholder.value = "Haberlerde Ara..."; break;
+    case 'video': quickSearchPlaceholder.value = "Videolarda Ara..."; break;
+    default: quickSearchPlaceholder.value = "Ara...";
   }
   nextTick(() => {
     quickSearchInputRef.value?.focus();
@@ -743,6 +880,36 @@ onMounted(() => {
     fetchResults(searchQuery.value, currentType.value);
     hasSearched.value = true;
   }
+
+  const savedLang = localStorage.getItem('synapicSearchLang');
+  
+  if (savedLang) {
+    currentLang.value = savedLang;
+    const cookieValue = `/tr/${savedLang}`;
+    const decodeCookie = decodeURIComponent(document.cookie);
+    
+    if (!decodeCookie.includes(`googtrans=${cookieValue}`)) {
+      const expires = "; expires=" + new Date(Date.now() + 86400000).toUTCString();
+      document.cookie = `googtrans=${cookieValue}${expires}; path=/`;
+      document.cookie = `googtrans=${cookieValue}${expires}; path=/; domain=${window.location.hostname}`;
+      window.location.reload();
+    }
+  }
+
+  loadGoogleTranslate();
+
+  const observer = new MutationObserver(() => {
+    const selectors = ['.goog-te-banner-frame', '.skiptranslate', '#goog-gt-tt', '.goog-te-balloon-frame'];
+    selectors.forEach(s => {
+      const el = document.querySelector(s);
+      if (el) {
+        el.style.setProperty('display', 'none', 'important');
+      }
+    });
+    document.body.style.top = '0px';
+  });
+
+  observer.observe(document.documentElement, { childList: true, subtree: true });
 });
 </script>
 
@@ -1885,4 +2052,28 @@ onMounted(() => {
     overflow-x: auto; 
     margin: 1rem 0; 
   }
+
+  .custom-select {
+  background-color: #1a1a1a;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #3a3a3a;
+  font-size: 1rem;
+}
+
+.translate-action-btn {
+  margin-top: 10px;
+  background: #007aff;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
   </style>
