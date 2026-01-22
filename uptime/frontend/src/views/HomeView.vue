@@ -30,8 +30,31 @@
                   <span class="stat">{{ site.ping }}ms</span>
                   <span class="stat">{{ site.uptime.toFixed(1) }}%</span>
                 </div>
-                <div class="service-status" :class="(site.status === 'online' || site.status === 'unknown') && site.uptime >= 99 ? 'operational' : 'down'">
-                  {{ translations[currentLang].status[(site.status === 'online' || site.status === 'unknown') && site.uptime >= 99 ? 'operational' : 'down'] }}
+                <div class="pie-chart-container" @mouseenter="showPieTooltip(site, $event)" @mouseleave="hidePieTooltip(site)">
+                  <svg width="32" height="32" viewBox="0 0 36 36" class="pie-chart">
+                    <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#f87171" stroke-width="3.5"></circle>
+                    <circle 
+                      cx="18" 
+                      cy="18" 
+                      r="15.915" 
+                      fill="transparent"
+                      stroke="#5cdd8b"
+                      stroke-width="3.5"
+                      :stroke-dasharray="`${site.uptime} ${100 - site.uptime}`"
+                      stroke-dashoffset="25"
+                      transform="rotate(-90 18 18)"
+                    ></circle>
+                  </svg>
+                  <div v-if="site.pieTooltip.show" class="pie-tooltip">
+                    <div class="pie-tooltip-item">
+                      <span class="pie-tooltip-color" style="background-color: #5cdd8b;"></span>
+                      <span>{{ translations[currentLang].uptime }}: {{ site.uptime.toFixed(1) }}%</span>
+                    </div>
+                    <div class="pie-tooltip-item">
+                      <span class="pie-tooltip-color" style="background-color: #f87171;"></span>
+                      <span>{{ translations[currentLang].downtime }}: {{ (100 - site.uptime).toFixed(1) }}%</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -122,7 +145,8 @@ export default {
         chartData: [],
         timeRange: 'minute',
         chartExpanded: false,
-        tooltip: { show: false, x: 0, y: 0, time: '', value: '' }
+        tooltip: { show: false, x: 0, y: 0, time: '', value: '' },
+        pieTooltip: { show: false, x: 0, y: 0 }
       },
       {
         url: 'https://api.synapic.com.tr/api/search?q=test',
@@ -134,7 +158,8 @@ export default {
         chartData: [],
         timeRange: 'minute',
         chartExpanded: false,
-        tooltip: { show: false, x: 0, y: 0, time: '', value: '' }
+        tooltip: { show: false, x: 0, y: 0, time: '', value: '' },
+        pieTooltip: { show: false, x: 0, y: 0 }
       }
     ]);
 
@@ -158,7 +183,9 @@ export default {
         today: 'Today',
         responseTime: 'Response Time',
         min: 'm',
-        hour: 'h'
+        hour: 'h',
+        uptime: 'Uptime',
+        downtime: 'Downtime'
       },
       tr: {
         statusTitle: {
@@ -174,7 +201,9 @@ export default {
         today: 'Bugün',
         responseTime: 'Yanıt Süresi',
         min: 'dk',
-        hour: 's'
+        hour: 's',
+        uptime: 'Çalışma',
+        downtime: 'Kesinti'
       }
     };
 
@@ -191,6 +220,18 @@ export default {
       if (hasDegraded) return 'degraded';
       return 'operational';
     });
+
+    const showPieTooltip = (site, event) => {
+      site.pieTooltip = {
+        show: true,
+        x: 0,
+        y: 0
+      };
+    };
+
+    const hidePieTooltip = (site) => {
+      site.pieTooltip.show = false;
+    };
 
     const updateCurrentTime = () => {
       const now = new Date();
@@ -567,7 +608,9 @@ export default {
       changeTimeRange,
       handleMouseMove,
       handleMouseLeave,
-      changeLang
+      changeLang,
+      showPieTooltip,
+      hidePieTooltip
     };
   }
 };
@@ -697,7 +740,7 @@ export default {
   background-color: #0a0a0a;
   border: 1px solid #1a1a1a;
   border-radius: 0.5rem;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .service-header {
@@ -708,6 +751,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+  border-radius: 0.5rem 0.5rem 0 0;
 }
 
 .service-header:hover {
@@ -750,22 +794,51 @@ export default {
   white-space: nowrap;
 }
 
-.service-status {
+.pie-chart-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pie-chart {
+  display: block;
+  filter: drop-shadow(0 0 4px rgba(92, 221, 139, 0.3));
+  border-radius: 50%;
+}
+
+.pie-tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.95);
+  border: 1px solid #2a2a2a;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  pointer-events: none;
+  z-index: 100;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.375rem 0.75rem;
-  border-radius: 0.25rem;
   white-space: nowrap;
+  min-width: 150px;
 }
 
-.service-status.operational {
-  background-color: rgba(92, 221, 139, 0.1);
-  color: #5cdd8b;
+.pie-tooltip-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
-.service-status.down {
-  background-color: rgba(248, 113, 113, 0.1);
-  color: #f87171;
+.pie-tooltip-item:last-child {
+  margin-bottom: 0;
+}
+
+.pie-tooltip-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
 }
 
 .uptime-history {
@@ -773,6 +846,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  border-radius: 0 0 0.5rem 0.5rem;
 }
 
 .history-label {
@@ -832,6 +906,7 @@ export default {
 .chart-container {
   border-top: 1px solid #1a1a1a;
   padding: 1.5rem;
+  border-radius: 0 0 0.5rem 0.5rem;
 }
 
 .chart-header {
