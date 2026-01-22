@@ -140,8 +140,8 @@ export default {
 
     const currentTime = ref('');
     let updateInterval = null;
-    const API_URL = 'http://localhost:3001/api';
-    const API_KEY = 'apikey';
+    const API_URL = 'http://uptimeapi.synapic.com.tr/api';
+    const API_KEY = 'synapicsearch';
 
     const translations = {
       en: {
