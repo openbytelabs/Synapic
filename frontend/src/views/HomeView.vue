@@ -93,6 +93,10 @@
             <i class="fa-solid fa-lock"></i>
             <span>Gizlilik & Kurallar</span>
           </a>
+          <a href="https://uptime.synapic.com.tr" class="menu-item">
+            <i class="fa-solid fa-computer"></i>
+            <span>Sistem Monitör</span>
+          </a>
           <select class="custom-select" v-model="currentLang">
             <option value="tr">Turkish</option>
 <option value="en">English</option>
