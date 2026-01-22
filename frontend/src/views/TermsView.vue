@@ -36,9 +36,6 @@
           <li>
             <strong>API Requests:</strong> DuckDuckGo and OpenRouter AI services are used for search results. These services are subject to their own privacy policies, and Synapic is not responsible for their data processing practices.
           </li>
-          <li>
-            <strong>Device ID:</strong> A random device identifier (e.g., apm_123456) is generated and stored locally for internal functionality. This ID is not personally identifiable and never leaves your device.
-          </li>
         </ul>
 
         <h3 class="subsection-title">1.2 How We Use Your Information</h3>
