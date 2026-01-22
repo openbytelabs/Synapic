@@ -191,11 +191,11 @@ export default {
         statusTitle: {
           operational: 'Tüm Sistemler Çalışıyor',
           degraded: 'Düşük Performans',
-          down: 'Sistem Çalışmıyor'
+          down: 'Sistemde Aksaklık Var'
         },
         status: {
           operational: 'Çalışıyor',
-          down: 'Çalışmıyor'
+          down: 'Aksaklık Var'
         },
         days90: '90 Gün',
         today: 'Bugün',
