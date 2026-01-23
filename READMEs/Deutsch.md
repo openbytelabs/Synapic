@@ -88,30 +88,30 @@ BSD 3-Clause License
 
 Copyright (c) 2023, openbytelabs
 
-Die Weitergabe und Verwendung in Quell- und Binärform, mit oder ohne
-Änderungen, ist unter folgenden Bedingungen gestattet:
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-1. Bei der Weitergabe des Quellcodes müssen der obenstehende Copyright-Hinweis, diese
-   Liste der Bedingungen und der folgende Haftungsausschluss beibehalten werden.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-2. Bei der Weitergabe in Binärform müssen der obenstehende Copyright-Hinweis,
-   diese Liste der Bedingungen und der folgende Haftungsausschluss in der Dokumentation
-   und/oder anderen mit der Verteilung bereitgestellten Materialien enthalten.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
 
-3. Weder der Name des Urheberrechtsinhabers noch die Namen seiner
-   Mitwirkenden dürfen ohne vorherige ausdrückliche schriftliche Genehmigung zur Werbung oder Verkaufsförderung für Produkte verwendet werden, die aus
-   dieser Software abgeleitet sind.
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
 
-DIESE SOFTWARE WIRD VON DEN URHEBERRECHTSINHABERN UND MITWIRKENDEN „WIE BESEHEN“
-UND JEGLICHE AUSDRÜCKLICHEN ODER STILLSCHWEIGENDEN GEWÄHRLEISTUNGEN, EINSCHLIESSLICH, ABER NICHT BESCHRÄNKT AUF DIE
-STILLSCHWEIGENDEN GEWÄHRLEISTUNGEN DER MARKTGÄNGIGKEIT UND EIGNUNG FÜR EINEN BESTIMMTEN ZWECK,
-WERDEN AUSGESCHLOSSEN. IN KEINEM FALL HAFTEN DER URHEBERRECHTSINHABER ODER DIE MITWIRKENDEN
-FÜR DIREKTE, INDIREKTE, ZUFÄLLIGE, BESONDERE, EXEMPLARISCHE ODER FOLGESCHÄDEN
-(EINSCHLIESSLICH, ABER NICHT BESCHRÄNKT AUF DIE BESCHAFFUNG VON ERSATZWAREN ODER
-DIENSTLEISTUNGEN, NUTZUNGSAUSFALL, DATENVERLUST ODER ENTGANGENE GEWINNE ODER GESCHÄFTSUNTERBRECHUNGEN), UNABHÄNGIG VON
-UND AUFGRUND JEGLICHER HAFTUNGSTHEORIE, OB AUS VERTRAG, VERSCHULDENSUNABHÄNGIGER HAFTUNG
-ODER UNERLAUBTER HANDLUNG (EINSCHLIESSLICH FAHRLÄSSIGKEIT ODER ANDERWEITIG), DIE SICH IN IRGENDEINER WEISE AUS DER NUTZUNG
-DIESER SOFTWARE ERGIBT, SELBST WENN AUF DIE MÖGLICHKEIT SOLCHER SCHÄDEN HINGEWIESEN WURDE.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ```
 
 ## Kontakt
