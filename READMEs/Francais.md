@@ -84,34 +84,34 @@ Synapic ne stocke aucune donnée personnelle sur ses serveurs. Tout l'historique
 Ce projet est sous licence BSD 3-Clause.
 
 ```
-Licence BSD 3-Clause
+BSD 3-Clause License
 
 Copyright (c) 2023, openbytelabs
 
-La redistribution et l'utilisation sous forme source et binaire, avec ou sans
-modification, sont autorisées à condition que les conditions suivantes soient remplies :
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-1. Les redistributions du code source doivent conserver la mention de copyright ci-dessus, cette
-   liste de conditions et la clause de non-responsabilité suivante.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-2. Les redistributions sous forme binaire doivent reproduire la mention de copyright ci-dessus,
-   cette liste de conditions et la clause de non-responsabilité suivante dans la documentation
-   et/ou dans d'autres documents fournis avec la distribution.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
 
-3. Ni le nom du détenteur du copyright ni les noms de ses
-   contributeurs ne peuvent être utilisés pour approuver ou promouvoir des produits dérivés de
-   ce logiciel sans autorisation écrite préalable spécifique.
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
 
-CE LOGICIEL EST FOURNI PAR LES DÉTENTEURS DU COPYRIGHT ET LES CONTRIBUTEURS « TEL QUEL »
-ET TOUTE GARANTIE EXPRESSE OU IMPLICITE, Y COMPRIS, MAIS SANS S'Y LIMITER, LES
-GARANTIES IMPLICITES DE QUALITÉ MARCHANDE ET D'ADÉQUATION À UN USAGE PARTICULIER, SONT
-EXCLUES. EN AUCUN CAS, LE TITULAIRE DU DROIT D'AUTEUR OU LES CONTRIBUTEURS NE PEUVENT ÊTRE TENUS RESPONSABLES
-DES DOMMAGES DIRECTS, INDIRECTS, ACCESSOIRES, SPÉCIAUX, EXEMPLAIRES OU CONSÉCUTIFS
-(Y COMPRIS, MAIS SANS S'Y LIMITER, L'ACHAT DE BIENS OU DE SERVICES DE REMPLACEMENT,
-LA PERTE D'UTILISATION, DE DONNÉES OU DE BÉNÉFICES, OU L'INTERRUPTION D'ACTIVITÉ) QUELLE QU'EN SOIT LA CAUSE
-LA CAUSE ET SUR TOUTE THÉORIE DE RESPONSABILITÉ, QU'ELLE SOIT CONTRACTUELLE, STRICTE
-OU DÉLICTUELLE (Y COMPRIS LA NÉGLIGENCE OU AUTRE) DÉCOULANT DE L'UTILISATION
-DE CE LOGICIEL, MÊME SI LA POSSIBILITÉ DE TELS DOMMAGES A ÉTÉ SIGNALÉE.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ```
 
 ## Contact
