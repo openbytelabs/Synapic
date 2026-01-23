@@ -122,7 +122,7 @@ For questions: yigitkabak@tuta.io
 
 <div align="center">
 
-### Thanks
+### Built with ❤️ using
 
 <a href="https://www.freebsd.org/" style="text-decoration: none; border: none;">
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/BSD_wordmark.svg/330px-BSD_wordmark.svg.png?20111103140023" width="100" alt="BSD" style="border: none;"/>
