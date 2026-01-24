@@ -76,19 +76,14 @@
 
     <footer class="app-footer">
       <div class="footer-content">
-        <a href="https://github.com/synapic" target="_blank" rel="noopener noreferrer" class="footer-link">
-          <i class="fab fa-github"></i>
-          <span>GitHub</span>
-        </a>
-        
-        <div class="system-status">
-          <span :class="['status-indicator', systemStatusClass]"></span>
-          <span class="status-text">{{ systemStatusText }}</span>
-        </div>
-        
         <a href="https://uptime.synapic.com.tr" target="_blank" rel="noopener noreferrer" class="footer-link">
           <i class="fas fa-chart-line"></i>
           <span>Monitor</span>
+        </a>
+        
+        <a href="https://github.com/synapic" target="_blank" rel="noopener noreferrer" class="footer-link">
+          <i class="fab fa-github"></i>
+          <span>GitHub</span>
         </a>
       </div>
     </footer>
@@ -377,7 +372,7 @@ const checkSystemStatus = async () => {
   } catch (error) {
     console.error('Status check failed:', error);
     systemStatusText.value = 'Status unavailable';
-    systemStatusClass.value = 'offline';
+    systemStatusClass.value = 'online';
   }
 };
 
@@ -994,21 +989,20 @@ const setQuickSearchType = (type) => {
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 @media (max-width: 768px) {
   .footer-content {
-    gap: 0.5rem;
-    padding: 0;
+    gap: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
   .footer-content {
-    gap: 0.4rem;
+    gap: 1rem;
   }
 }
 
@@ -1020,7 +1014,7 @@ const setQuickSearchType = (type) => {
   text-decoration: none;
   font-size: 0.875rem;
   font-weight: 500;
-  padding: 0.5rem 0.75rem;
+  padding: 0.6rem 1rem;
   border-radius: 0.5rem;
   transition: all 0.2s ease;
   min-height: 44px;
@@ -1028,29 +1022,21 @@ const setQuickSearchType = (type) => {
 
 @media (max-width: 768px) {
   .footer-link {
-    flex-direction: column;
-    gap: 0.2rem;
-    padding: 0.3rem 0.4rem;
-    font-size: 0.65rem;
-    min-height: auto;
-  }
-  
-  .footer-link i {
-    font-size: 0.95rem;
-  }
-  
-  .footer-link span {
-    display: none;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.8rem;
+    gap: 0.4rem;
   }
 }
 
 @media (max-width: 480px) {
   .footer-link {
-    padding: 0.25rem 0.3rem;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.75rem;
+    gap: 0.35rem;
   }
   
-  .footer-link i {
-    font-size: 0.9rem;
+  .footer-link span {
+    font-size: 0.7rem;
   }
 }
 
@@ -1058,124 +1044,6 @@ const setQuickSearchType = (type) => {
   .footer-link:hover {
     color: #10b981;
     background: rgba(16, 185, 129, 0.1);
-  }
-}
-
-.system-status {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.5rem 1rem;
-  background: rgba(28, 28, 30, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 2rem;
-  transition: all 0.3s ease;
-}
-
-@media (max-width: 768px) {
-  .system-status {
-    padding: 0.35rem 0.7rem;
-    gap: 0.35rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .system-status {
-    padding: 0.3rem 0.6rem;
-    gap: 0.3rem;
-  }
-}
-
-.system-status:hover {
-  background: rgba(28, 28, 30, 0.95);
-  border-color: rgba(255, 255, 255, 0.15);
-}
-
-.status-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  position: relative;
-  flex-shrink: 0;
-}
-
-@media (max-width: 768px) {
-  .status-indicator {
-    width: 7px;
-    height: 7px;
-  }
-}
-
-.status-indicator::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  animation: ripple 2s ease-out infinite;
-}
-
-.status-indicator.online {
-  background-color: #10b981;
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
-}
-
-.status-indicator.online::before {
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, transparent 70%);
-}
-
-.status-indicator.warning {
-  background-color: #f59e0b;
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
-}
-
-.status-indicator.warning::before {
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.4) 0%, transparent 70%);
-}
-
-.status-indicator.offline {
-  background-color: #ef4444;
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
-}
-
-.status-indicator.offline::before {
-  background: radial-gradient(circle, rgba(239, 68, 68, 0.4) 0%, transparent 70%);
-}
-
-.status-indicator.checking {
-  background-color: #6b7280;
-}
-
-.status-indicator.checking::before {
-  background: radial-gradient(circle, rgba(107, 114, 128, 0.4) 0%, transparent 70%);
-}
-
-@keyframes ripple {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(2.5);
-    opacity: 0;
-  }
-}
-
-.status-text {
-  font-size: 0.8rem;
-  color: #e5e7eb;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-}
-
-@media (max-width: 768px) {
-  .status-text {
-    font-size: 0.65rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .status-text {
-    font-size: 0.6rem;
   }
 }
 
