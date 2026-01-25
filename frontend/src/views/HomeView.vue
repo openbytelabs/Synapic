@@ -81,7 +81,7 @@
           <span>Monitor</span>
         </a>
         
-        <a href="https://github.com/synapic" target="_blank" rel="noopener noreferrer" class="footer-link">
+        <a href="https://github.com/openbytelabs/Synapic" target="_blank" rel="noopener noreferrer" class="footer-link">
           <i class="fab fa-github"></i>
           <span>GitHub</span>
         </a>
