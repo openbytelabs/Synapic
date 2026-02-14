@@ -9,7 +9,7 @@
       <nav class="nav">
         <a href="/" class="nav-item" @click="menuOpen = false">
           <i class="fa-solid fa-house"></i>
-          <span class="nav-text">Home</span>
+          <span class="nav-text">Ana Sayfa</span>
         </a>
         <a href="/api" class="nav-item" @click="menuOpen = false">
           <i class="fa-solid fa-link"></i>
@@ -17,11 +17,11 @@
         </a>
         <a href="/terms" class="nav-item" @click="menuOpen = false">
           <i class="fa-solid fa-shield-halved"></i>
-          <span class="nav-text">Privacy & Terms</span>
+          <span class="nav-text">Gizlilik & Koşullar</span>
         </a>
         <a href="/settings" class="nav-item" @click="menuOpen = false">
           <i class="fa-solid fa-gear"></i>
-          <span class="nav-text">Settings</span>
+          <span class="nav-text">Ayarlar</span>
         </a>
       </nav>
     </aside>
@@ -40,6 +40,7 @@
             class="search-input-top"
             v-model="searchQuery"
             @keyup.enter="performSearch"
+            placeholder="Arama yap..."
           />
         </div>
 
@@ -58,7 +59,7 @@
             @click="changeSearchType('image')"
           >
             <i class="fa-solid fa-image"></i>
-            <span>Images</span>
+            <span>Görseller</span>
           </button>
           <button
             class="type-button"
@@ -66,7 +67,7 @@
             @click="changeSearchType('news')"
           >
             <i class="fa-solid fa-newspaper"></i>
-            <span>News</span>
+            <span>Haberler</span>
           </button>
           <button
             class="type-button"
@@ -74,8 +75,13 @@
             @click="changeSearchType('maps')"
           >
             <i class="fa-solid fa-map-location-dot"></i>
-            <span>Maps</span>
+            <span>Haritalar</span>
           </button>
+        </div>
+
+        <div class="info-notice">
+          <i class="fa-solid fa-circle-info"></i>
+          <span>İlk aramalarda sonuçlar yavaş gelebilir, lütfen bekleyin.</span>
         </div>
       </div>
 
@@ -85,7 +91,7 @@
           <span></span>
           <span></span>
         </div>
-        <div v-if="!isLoading && searchType !== 'maps' && results.length === 0 && noResultsVisible" class="no-results-message">No results found. Try searching for something.</div>
+        <div v-if="!isLoading && searchType !== 'maps' && results.length === 0 && noResultsVisible" class="no-results-message">Sonuç bulunamadı. Başka bir şey aramayı deneyin.</div>
 
         <div v-if="aiAnswer && !isLoading && searchType === 'web'" class="ai-answer-card">
           <div class="ai-header">
@@ -93,12 +99,12 @@
               <i class="fa-solid fa-brain"></i>
               <span class="ai-title">Synapic AI</span>
             </div>
-            <div class="ai-badge">AI-Powered Answer</div>
+            <div class="ai-badge">Yapay Zeka Yanıtı</div>
           </div>
           <div class="ai-content" v-html="formatAIAnswer(aiAnswer)"></div>
           <div class="ai-footer">
             <i class="fa-solid fa-circle-info"></i>
-            <span>Answer generated from search results</span>
+            <span>Arama sonuçlarından oluşturulan yanıt</span>
           </div>
         </div>
 
@@ -111,7 +117,7 @@
           </div>
           <div class="ai-loading-content">
             <i class="fa-solid fa-spinner fa-spin"></i>
-            <span>Analyzing search results...</span>
+            <span>Arama sonuçları analiz ediliyor...</span>
           </div>
         </div>
 
@@ -156,7 +162,7 @@
               ></iframe>
               <div class="result-title-below">
                 <i class="fa-brands fa-youtube youtube-icon"></i>
-                <span>{{ result.title || 'YouTube Video' }}</span>
+                <span>{{ result.title || 'YouTube Videosu' }}</span>
               </div>
             </div>
             <template v-else>
@@ -177,7 +183,7 @@
                   <div class="menu-dropdown" v-if="activeMenu === index">
                     <button class="menu-option" @click="copyUrl(result.url, index)">
                       <i class="fa-solid fa-copy"></i>
-                      Copy URL
+                      URL'yi Kopyala
                     </button>
                   </div>
                 </div>
@@ -206,7 +212,7 @@
                 <div class="menu-dropdown" v-if="activeMenu === index">
                   <button class="menu-option" @click="copyUrl(result.url, index)">
                     <i class="fa-solid fa-copy"></i>
-                    Copy URL
+                    URL'yi Kopyala
                   </button>
                 </div>
               </div>
@@ -267,8 +273,6 @@ const currentPage = ref(1);
 const noResultsVisible = ref(false);
 let noResultsTimer = null;
 const resultsPerPage = 10;
-
-const API_BASE_URL = 'https://api.synapic.com.tr';
 
 const mapsUrl = computed(() => {
   if (!searchQuery.value) return '';
@@ -352,7 +356,7 @@ const fetchAIAnswer = async (query) => {
   aiAnswer.value = '';
 
   try {
-    const response = await fetch(`${API_BASE_URL}/ai?q=${encodeURIComponent(query)}`);
+    const response = await fetch(`https://api.synapic.com.tr/ai?q=${encodeURIComponent(query)}`);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -363,11 +367,11 @@ const fetchAIAnswer = async (query) => {
     if (data.answer) {
       aiAnswer.value = data.answer;
     } else {
-      aiAnswer.value = 'Unable to generate AI summary at this time.';
+      aiAnswer.value = 'Şu anda yapay zeka özeti oluşturulamıyor.';
     }
   } catch (error) {
     console.error('AI Error:', error);
-    aiAnswer.value = 'Error generating AI summary.';
+    aiAnswer.value = 'Yapay zeka özeti oluşturulurken hata meydana geldi.';
   } finally {
     aiLoading.value = false;
   }
@@ -375,13 +379,13 @@ const fetchAIAnswer = async (query) => {
 
 const buildSearchUrl = (query, type) => {
   if (type === 'web') {
-    return `${API_BASE_URL}/api?q=${encodeURIComponent(query)}`;
+    return `https://api.synapic.com.tr/api?q=${encodeURIComponent(query)}`;
   } else if (type === 'news') {
-    return `${API_BASE_URL}/news?q=${encodeURIComponent(query)}`;
+    return `https://api.synapic.com.tr/news?q=${encodeURIComponent(query)}`;
   } else if (type === 'image') {
-    return `${API_BASE_URL}/images?q=${encodeURIComponent(query)}`;
+    return `https://api.synapic.com.tr/images?q=${encodeURIComponent(query)}`;
   }
-  return `${API_BASE_URL}/api?q=${encodeURIComponent(query)}`;
+  return `https://api.synapic.com.tr/api?q=${encodeURIComponent(query)}`;
 };
 
 const performSearch = async (forceType) => {
@@ -421,7 +425,7 @@ const performSearch = async (forceType) => {
     if (data.results && Array.isArray(data.results)) {
       fetchedResults = data.results.map(result => ({
         ...result,
-        date: new Date().toLocaleDateString('en-US', {
+        date: new Date().toLocaleDateString('tr-TR', {
           year: 'numeric',
           month: 'short',
           day: 'numeric'
@@ -463,7 +467,7 @@ const handleImageError = (event) => {
 };
 
 const handleImageLoadError = (event) => {
-  event.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23333" width="200" height="200"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EImage Error%3C/text%3E%3C/svg%3E';
+  event.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23333" width="200" height="200"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EGörsel Hatası%3C/text%3E%3C/svg%3E';
   event.target.style.objectFit = 'contain';
   event.target.style.backgroundColor = 'rgba(48, 52, 58, 0.8)';
 };
@@ -785,6 +789,27 @@ watch(() => route.query.q, (newQuery) => {
 
 .type-button i {
   font-size: 16px;
+}
+
+.info-notice {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 12px;
+  color: rgba(212, 175, 55, 0.9);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.info-notice i {
+  font-size: 16px;
+  flex-shrink: 0;
 }
 
 .results-container {
@@ -1258,6 +1283,15 @@ watch(() => route.query.q, (newQuery) => {
     min-width: 120px;
   }
 
+  .info-notice {
+    font-size: 12px;
+    padding: 10px 16px;
+  }
+
+  .info-notice i {
+    font-size: 14px;
+  }
+
   .results-container {
     padding: 16px 24px 40px;
   }
@@ -1341,6 +1375,15 @@ watch(() => route.query.q, (newQuery) => {
 
   .type-button span {
     display: inline;
+  }
+
+  .info-notice {
+    font-size: 11px;
+    padding: 8px 14px;
+  }
+
+  .info-notice i {
+    font-size: 12px;
   }
 
   .results-container {
