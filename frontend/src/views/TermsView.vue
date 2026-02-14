@@ -90,7 +90,7 @@
           Synapic, aşağıdaki özelliklere sahip tescilli bir web tarama ve dizinleme sistemi işletir:
         </p>
         <ul class="bullet-list">
-          <li>Mevcut veritabanında yaklaşık <strong>175.000 dizinlenmiş URL</strong></li>
+          <li>Mevcut veritabanında yaklaşık <strong>10.000.000+ dizinlenmiş URL</strong></li>
           <li>Yalnızca herkese açık web sayfalarının dizinlenmesi</li>
           <li>Gizli veya kısıtlanmış içeriğin sistematik olarak hariç tutulması</li>
           <li>Verilerin yalnızca arama sonucu sağlama amacıyla kullanılması</li>
@@ -242,7 +242,7 @@ THIS SOFTWARE IS PROVIDED "AS IS".
 
         <h3 class="subsection-title">4.2 Veri Depolama Mimarisi</h3>
         <ul class="bullet-list">
-          <li><strong>Sunucu Tarafı Depolama:</strong> Genel web dizini (~175.000 URL)</li>
+          <li><strong>Sunucu Tarafı Depolama:</strong> Genel web dizini (10.000.000+ URL)</li>
           <li><strong>İstemci Tarafı Depolama:</strong> Tarayıcı localStorage uygulaması</li>
           <li>Analitik, reklam veya takip mekanizmalarının hiçbiri bulunmaz</li>
         </ul>
