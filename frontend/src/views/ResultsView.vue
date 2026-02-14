@@ -16,10 +16,10 @@
           <span class="nav-text">API</span>
         </a>
         <a href="/terms" class="nav-item" @click="menuOpen = false">
-            <i class="fa-solid fa-shield-halved"></i>
-            <span class="nav-text">Privacy & Terms</span>
-          </a>
-          <a href="/settings" class="nav-item" @click="menuOpen = false">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span class="nav-text">Privacy & Terms</span>
+        </a>
+        <a href="/settings" class="nav-item" @click="menuOpen = false">
           <i class="fa-solid fa-gear"></i>
           <span class="nav-text">Settings</span>
         </a>
@@ -35,41 +35,41 @@
       <div class="search-header">
         <div class="search-box-top">
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input 
-            type="text" 
-            class="search-input-top" 
+          <input
+            type="text"
+            class="search-input-top"
             v-model="searchQuery"
             @keyup.enter="performSearch"
           />
         </div>
-        
+
         <div class="search-type-selector">
-          <button 
-            class="type-button" 
+          <button
+            class="type-button"
             :class="{ active: searchType === 'web' }"
             @click="changeSearchType('web')"
           >
             <i class="fa-solid fa-globe"></i>
             <span>Web</span>
           </button>
-          <button 
-            class="type-button" 
+          <button
+            class="type-button"
             :class="{ active: searchType === 'image' }"
             @click="changeSearchType('image')"
           >
             <i class="fa-solid fa-image"></i>
             <span>Images</span>
           </button>
-          <button 
-            class="type-button" 
+          <button
+            class="type-button"
             :class="{ active: searchType === 'news' }"
             @click="changeSearchType('news')"
           >
             <i class="fa-solid fa-newspaper"></i>
             <span>News</span>
           </button>
-          <button 
-            class="type-button" 
+          <button
+            class="type-button"
             :class="{ active: searchType === 'maps' }"
             @click="changeSearchType('maps')"
           >
@@ -80,12 +80,13 @@
       </div>
 
       <div class="results-container">
-        <div v-if="isLoading" class="loading-message">
-          <i class="fa-solid fa-spinner fa-spin"></i>
-          Loading results...
+        <div v-if="isLoading" class="loading-dots">
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
-        <div v-else-if="searchType !== 'maps' && results.length === 0" class="no-results-message">No results found. Try searching for something.</div>
-        
+        <div v-if="!isLoading && searchType !== 'maps' && results.length === 0 && noResultsVisible" class="no-results-message">No results found. Try searching for something.</div>
+
         <div v-if="aiAnswer && !isLoading && searchType === 'web'" class="ai-answer-card">
           <div class="ai-header">
             <div class="ai-logo">
@@ -113,7 +114,7 @@
             <span>Analyzing search results...</span>
           </div>
         </div>
-        
+
         <div v-if="searchType === 'maps' && searchQuery" class="maps-container">
           <iframe
             :src="mapsUrl"
@@ -127,8 +128,8 @@
         </div>
 
         <div v-if="searchType === 'image' && !isLoading" class="image-grid">
-          <div 
-            v-for="(result, index) in paginatedResults" 
+          <div
+            v-for="(result, index) in paginatedResults"
             :key="index"
             class="image-item"
           >
@@ -141,7 +142,52 @@
           </div>
         </div>
 
-        <div v-if="searchType === 'web' || searchType === 'news'">
+        <div v-if="searchType === 'web' && !isLoading">
+          <div class="result-item" v-for="(result, index) in paginatedResults" :key="index">
+            <div v-if="isYoutubeEmbed(result.url)" class="youtube-embed-wrapper">
+              <iframe
+                :src="result.url"
+                width="100%"
+                height="315"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                style="border-radius: 12px;"
+              ></iframe>
+              <div class="result-title-below">
+                <i class="fa-brands fa-youtube youtube-icon"></i>
+                <span>{{ result.title || 'YouTube Video' }}</span>
+              </div>
+            </div>
+            <template v-else>
+              <div class="result-header">
+                <div class="result-left">
+                  <img :src="getFavicon(result.url)" class="site-favicon" @error="handleImageError" />
+                  <div class="result-info">
+                    <a :href="result.url" target="_blank" class="result-title-link">
+                      <h3 class="result-title">{{ result.title }}</h3>
+                    </a>
+                    <a :href="result.url" class="result-url" target="_blank">{{ result.url }}</a>
+                  </div>
+                </div>
+                <div class="result-menu">
+                  <button class="menu-button" @click="toggleMenu(index)">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                  </button>
+                  <div class="menu-dropdown" v-if="activeMenu === index">
+                    <button class="menu-option" @click="copyUrl(result.url, index)">
+                      <i class="fa-solid fa-copy"></i>
+                      Copy URL
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <p class="result-date">{{ result.date }} — {{ result.description }}</p>
+            </template>
+          </div>
+        </div>
+
+        <div v-if="searchType === 'news' && !isLoading">
           <div class="result-item" v-for="(result, index) in paginatedResults" :key="index">
             <div class="result-header">
               <div class="result-left">
@@ -170,8 +216,8 @@
         </div>
 
         <div class="pagination" v-if="totalPages > 1 && searchType !== 'maps'">
-          <button 
-            class="pagination-button" 
+          <button
+            class="pagination-button"
             :class="{ disabled: currentPage === 1 }"
             @click="changePage(currentPage - 1)"
             :disabled="currentPage === 1"
@@ -179,18 +225,18 @@
             <i class="fa-solid fa-chevron-left"></i>
           </button>
 
-          <button 
-            v-for="page in displayedPages" 
+          <button
+            v-for="page in displayedPages"
             :key="page"
-            class="pagination-button page-number" 
+            class="pagination-button page-number"
             :class="{ active: currentPage === page }"
             @click="changePage(page)"
           >
             {{ page }}
           </button>
 
-          <button 
-            class="pagination-button" 
+          <button
+            class="pagination-button"
             :class="{ disabled: currentPage === totalPages }"
             @click="changePage(currentPage + 1)"
             :disabled="currentPage === totalPages"
@@ -218,52 +264,9 @@ const isLoading = ref(false);
 const aiLoading = ref(false);
 const aiAnswer = ref('');
 const currentPage = ref(1);
+const noResultsVisible = ref(false);
+let noResultsTimer = null;
 const resultsPerPage = 10;
-
-const API_BASE_URL = 'http://localhost:3000';
-const API_ENDPOINT = `${API_BASE_URL}/api`;
-const AI_ENDPOINT = `${API_BASE_URL}/ai`;
-const OPENROUTER_API_KEY = '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';
-const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-
-const AI_MODELS = [
-  "meta-llama/llama-3.1-405b-instruct:free",
-  "nousresearch/hermes-3-llama-3.1-405b:free",
-  "qwen/qwen3-235b-a22b:free",
-  "openai/gpt-oss-120b:free",
-  "meta-llama/llama-3.3-70b-instruct:free",
-  "deepseek/deepseek-r1-0528:free",
-  "google/gemini-2.0-flash-exp:free",
-  "z-ai/glm-4.5-air:free",
-  "google/gemma-3-27b-it:free",
-  "nvidia/nemotron-3-nano-30b-a3b:free",
-  "alibaba/tongyi-deepresearch-30b-a3b:free",
-  "allenai/olmo-3.1-32b-think:free",
-  "mistralai/mistral-small-3.1-24b-instruct:free",
-  "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
-  "openai/gpt-oss-20b:free",
-  "mistralai/devstral-2512:free",
-  "kwaipilot/kat-coder-pro:free",
-  "qwen/qwen3-coder:free",
-  "google/gemma-3-12b-it:free",
-  "nvidia/nemotron-nano-12b-v2-vl:free",
-  "nvidia/nemotron-nano-9b-v2:free",
-  "nex-agi/deepseek-v3.1-nex-n1:free",
-  "moonshotai/kimi-k2:free",
-  "tngtech/deepseek-r1t2-chimera:free",
-  "tngtech/deepseek-r1t-chimera:free",
-  "tngtech/tng-r1t-chimera:free",
-  "mistralai/mistral-7b-instruct:free",
-  "qwen/qwen-2.5-vl-7b-instruct:free",
-  "amazon/nova-2-lite-v1",
-  "xiaomi/mimo-v2-flash:free",
-  "google/gemma-3-4b-it:free",
-  "google/gemma-3n-e4b-it:free",
-  "qwen/qwen3-4b:free",
-  "meta-llama/llama-3.2-3b-instruct:free",
-  "google/gemma-3n-e2b-it:free",
-  "arcee-ai/trinity-mini:free"
-];
 
 const mapsUrl = computed(() => {
   if (!searchQuery.value) return '';
@@ -281,7 +284,7 @@ const paginatedResults = computed(() => {
 const displayedPages = computed(() => {
   const pages = [];
   const maxDisplayed = 7;
-  
+
   if (totalPages.value <= maxDisplayed) {
     for (let i = 1; i <= totalPages.value; i++) {
       pages.push(i);
@@ -309,14 +312,19 @@ const displayedPages = computed(() => {
       pages.push(totalPages.value);
     }
   }
-  
+
   return pages;
 });
 
+const isYoutubeEmbed = (url) => {
+  return url && url.includes('youtube.com/embed/');
+};
+
 const changeSearchType = (type) => {
+  if (searchType.value === type) return;
   searchType.value = type;
-  if (searchQuery.value) {
-    performSearch();
+  if (searchQuery.value.trim()) {
+    performSearch(type);
   }
 };
 
@@ -333,130 +341,109 @@ const formatAIAnswer = (text) => {
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
     .replace(/\n\n/g, '</p><p>')
     .replace(/\n/g, '<br>');
-  
+
   return `<p>${formatted}</p>`;
 };
 
 const fetchAIAnswer = async (query) => {
   aiLoading.value = true;
   aiAnswer.value = '';
-  
+
   try {
-    console.log(`[AI] Summarizing results for: ${query}`);
-    
-    const searchResults = results.value.slice(0, 10).map((result, index) => 
-      `${index + 1}. ${result.title} - ${result.url}\n   ${result.description}`
-    ).join('\n\n');
+    const response = await fetch(`https://api.synapic.com.tr/ai?q=${encodeURIComponent(query)}`);
 
-    const systemPrompt = `You are Synapic AI, an intelligent search assistant. Your role is to:
-1. Analyze the search results provided
-2. Provide a concise summary of the most relevant information
-3. Answer user questions based on the search results
-4. Always respond in the same language as the user's query
-5. Be clear, informative and helpful
-6. Always introduce yourself as "Synapic AI" when greeting
-7. dont use markdown
-
-Remember: You are Synapic AI, not any other AI assistant.`;
-
-    const userPrompt = `User Query: ${query}
-
-Search Results:
-${searchResults}
-
-Please provide a helpful summary and answer based on these search results. If this is a question, answer it. If it's a topic, summarize the key information from the results.`;
-
-    for (const model of AI_MODELS) {
-      try {
-        const response = await fetch(OPENROUTER_API_URL, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-            'Content-Type': 'application/json',
-            'HTTP-Referer': 'http://localhost:3000',
-            'X-Title': 'Synapic AI'
-          },
-          body: JSON.stringify({
-            model: model,
-            messages: [
-              { role: 'system', content: systemPrompt },
-              { role: 'user', content: userPrompt }
-            ],
-            temperature: 0.7,
-            max_tokens: 1000
-          })
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data.choices && data.choices.length > 0) {
-            const answer = data.choices[0].message.content;
-            console.log('[AI] Successfully got answer from model:', model);
-            aiAnswer.value = answer;
-            return;
-          }
-        }
-      } catch (modelError) {
-        console.log(`[AI] Model ${model} failed, trying next...`);
-        continue;
-      }
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
-    console.log('[AI] All models failed');
-    aiAnswer.value = 'Unable to generate AI summary at this time.';
+
+    const data = await response.json();
+
+    if (data.answer) {
+      aiAnswer.value = data.answer;
+    } else {
+      aiAnswer.value = 'Unable to generate AI summary at this time.';
+    }
   } catch (error) {
-    console.error('[AI] Error:', error);
+    console.error('AI Error:', error);
     aiAnswer.value = 'Error generating AI summary.';
   } finally {
     aiLoading.value = false;
   }
 };
 
-const performSearch = async () => {
+const buildSearchUrl = (query, type) => {
+  if (type === 'web') {
+    return `https://api.synapic.com.tr/api?q=${encodeURIComponent(query)}`;
+  } else if (type === 'news') {
+    return `https://api.synapic.com.tr/news?q=${encodeURIComponent(query)}`;
+  } else if (type === 'image') {
+    return `https://api.synapic.com.tr/images?q=${encodeURIComponent(query)}`;
+  }
+  return `https://api.synapic.com.tr/api?q=${encodeURIComponent(query)}`;
+};
+
+const performSearch = async (forceType) => {
   if (!searchQuery.value.trim()) return;
-  
-  if (searchType.value === 'maps') {
+
+  const currentType = forceType || searchType.value;
+
+  if (currentType === 'maps') {
     return;
   }
-  
+
+  if (noResultsTimer) {
+    clearTimeout(noResultsTimer);
+    noResultsTimer = null;
+  }
+  noResultsVisible.value = false;
+
   isLoading.value = true;
-  results.value = [];
   aiAnswer.value = '';
+  aiLoading.value = false;
   currentPage.value = 1;
   activeMenu.value = null;
-  
+
+  let fetchedResults = [];
+  let shouldFetchAI = false;
+
   try {
-    let url = `${API_ENDPOINT}?q=${encodeURIComponent(searchQuery.value)}`;
-    if (searchType.value !== 'web') {
-      url += `&type=${searchType.value}`;
-    }
+    const url = buildSearchUrl(searchQuery.value, currentType);
     const response = await fetch(url);
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     const data = await response.json();
-    
+
     if (data.results && Array.isArray(data.results)) {
-      results.value = data.results.map(result => ({
+      fetchedResults = data.results.map(result => ({
         ...result,
-        date: new Date().toLocaleDateString('en-US', { 
-          year: 'numeric', 
-          month: 'short', 
-          day: 'numeric' 
+        date: new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
         })
       }));
-      
-      if (searchType.value === 'web' && results.value.length > 0) {
-        fetchAIAnswer(searchQuery.value);
-      }
+      shouldFetchAI = currentType === 'web' && fetchedResults.length > 0;
     }
   } catch (error) {
     console.error('Search error:', error);
-    results.value = [];
-  } finally {
-    isLoading.value = false;
+    fetchedResults = [];
+  }
+
+  results.value = fetchedResults;
+  isLoading.value = false;
+
+  if (fetchedResults.length === 0 && currentType !== 'maps') {
+    noResultsTimer = setTimeout(() => {
+      noResultsVisible.value = true;
+      noResultsTimer = null;
+    }, 60000);
+  }
+
+  if (shouldFetchAI) {
+    fetchAIAnswer(searchQuery.value);
   }
 };
 
@@ -495,13 +482,13 @@ const closeOverlay = () => {
 onMounted(() => {
   const queryParam = route.query.q;
   const typeParam = route.query.type || 'web';
-  
+
   if (queryParam) {
     searchQuery.value = queryParam;
     searchType.value = typeParam;
-    performSearch();
+    performSearch(typeParam);
   }
-  
+
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.result-menu')) {
       activeMenu.value = null;
@@ -511,9 +498,10 @@ onMounted(() => {
 
 watch(() => route.query.q, (newQuery) => {
   if (newQuery) {
+    const typeParam = route.query.type || 'web';
     searchQuery.value = newQuery;
-    searchType.value = route.query.type || 'web';
-    performSearch();
+    searchType.value = typeParam;
+    performSearch(typeParam);
   }
 });
 </script>
@@ -980,6 +968,32 @@ watch(() => route.query.q, (newQuery) => {
   border-color: rgba(212, 175, 55, 0.15);
 }
 
+.youtube-embed-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.youtube-embed-wrapper iframe {
+  width: 100%;
+  height: 315px;
+  border-radius: 12px;
+}
+
+.result-title-below {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.youtube-icon {
+  color: #ff0000;
+  font-size: 20px;
+}
+
 .result-header {
   display: flex;
   justify-content: space-between;
@@ -1114,7 +1128,46 @@ watch(() => route.query.q, (newQuery) => {
   overflow-wrap: break-word;
 }
 
-.loading-message,
+.loading-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 60px 20px;
+}
+
+.loading-dots span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #d4af37;
+  display: inline-block;
+  animation: bounce 1.2s ease-in-out infinite;
+}
+
+.loading-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-16px);
+    opacity: 1;
+  }
+}
+
 .no-results-message {
   color: rgba(255, 255, 255, 0.6);
   font-size: 16px;
@@ -1124,10 +1177,6 @@ watch(() => route.query.q, (newQuery) => {
   align-items: center;
   gap: 12px;
   justify-content: center;
-}
-
-.loading-message i {
-  font-size: 20px;
 }
 
 .pagination {
@@ -1248,6 +1297,10 @@ watch(() => route.query.q, (newQuery) => {
     font-size: 12px;
   }
 
+  .youtube-embed-wrapper iframe {
+    height: 220px;
+  }
+
   .pagination {
     gap: 6px;
     margin-top: 24px;
@@ -1329,6 +1382,10 @@ watch(() => route.query.q, (newQuery) => {
 
   .result-date {
     font-size: 11px;
+  }
+
+  .youtube-embed-wrapper iframe {
+    height: 180px;
   }
 
   .pagination {
