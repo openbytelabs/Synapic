@@ -9,7 +9,7 @@
       <nav class="nav">
         <a href="/" class="nav-item" @click="menuOpen = false">
           <i class="fa-solid fa-house"></i>
-          <span class="nav-text">Home</span>
+          <span class="nav-text">Anasayfa</span>
         </a>
         <a href="/api" class="nav-item" @click="menuOpen = false">
           <i class="fa-solid fa-link"></i>
@@ -17,11 +17,11 @@
         </a>
         <a href="/terms" class="nav-item" @click="menuOpen = false">
           <i class="fa-solid fa-shield-halved"></i>
-          <span class="nav-text">Privacy & Terms</span>
+          <span class="nav-text">Gizlilik & Kurallar</span>
         </a>
         <a href="/settings" class="nav-item" @click="menuOpen = false">
           <i class="fa-solid fa-gear"></i>
-          <span class="nav-text">Settings</span>
+          <span class="nav-text">Ayarlar</span>
         </a>
       </nav>
     </aside>
@@ -58,7 +58,7 @@
             @click="changeSearchType('image')"
           >
             <i class="fa-solid fa-image"></i>
-            <span>Images</span>
+            <span>Resimler</span>
           </button>
           <button
             class="type-button"
@@ -66,7 +66,7 @@
             @click="changeSearchType('news')"
           >
             <i class="fa-solid fa-newspaper"></i>
-            <span>News</span>
+            <span>Haberler</span>
           </button>
           <button
             class="type-button"
@@ -74,7 +74,7 @@
             @click="changeSearchType('maps')"
           >
             <i class="fa-solid fa-map-location-dot"></i>
-            <span>Maps</span>
+            <span>Haritalar</span>
           </button>
         </div>
       </div>
@@ -85,7 +85,7 @@
           <span></span>
           <span></span>
         </div>
-        <div v-if="!isLoading && searchType !== 'maps' && results.length === 0 && noResultsVisible" class="no-results-message">No results found. Try searching for something.</div>
+        <div v-if="!isLoading && searchType !== 'maps' && results.length === 0 && noResultsVisible" class="no-results-message">Sonuç bulunamadı. Bir şey aramayı dene.</div>
 
         <div v-if="aiAnswer && !isLoading && searchType === 'web'" class="ai-answer-card">
           <div class="ai-header">
@@ -93,12 +93,12 @@
               <i class="fa-solid fa-brain"></i>
               <span class="ai-title">Synapic AI</span>
             </div>
-            <div class="ai-badge">AI-Powered Answer</div>
+            <div class="ai-badge">AI Destekli Sonuç</div>
           </div>
           <div class="ai-content" v-html="formatAIAnswer(aiAnswer)"></div>
           <div class="ai-footer">
             <i class="fa-solid fa-circle-info"></i>
-            <span>Answer generated from search results</span>
+            <span>Arama sonuçlarından oluşturulan cevap</span>
           </div>
         </div>
 
@@ -111,7 +111,7 @@
           </div>
           <div class="ai-loading-content">
             <i class="fa-solid fa-spinner fa-spin"></i>
-            <span>Analyzing search results...</span>
+            <span>Arama Sonuçları Analiz Ediliyor...</span>
           </div>
         </div>
 
@@ -177,7 +177,7 @@
                   <div class="menu-dropdown" v-if="activeMenu === index">
                     <button class="menu-option" @click="copyUrl(result.url, index)">
                       <i class="fa-solid fa-copy"></i>
-                      Copy URL
+                      URL'yi kopyala
                     </button>
                   </div>
                 </div>
@@ -206,7 +206,7 @@
                 <div class="menu-dropdown" v-if="activeMenu === index">
                   <button class="menu-option" @click="copyUrl(result.url, index)">
                     <i class="fa-solid fa-copy"></i>
-                    Copy URL
+                    URL'yi kopyala
                   </button>
                 </div>
               </div>
