@@ -105,6 +105,22 @@ Sorularınız için: yigitkabak@tuta.io
 
 <div align="center">
 
-**Go ve Vue.js kullanılarak ❤️ ile geliştirildi**
+### Bu teknolojiler kullanılarak sevgiyle geliştirildi ❤️
+
+<a href="https://www.linux.org/" style="text-decoration: none; border: none;">
+<img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" width="80" alt="Linux" style="border: none;"/>
+</a>
+&nbsp;&nbsp;&nbsp;
+<a href="https://vuejs.org/" style="text-decoration: none; border: none;">
+<img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Vue.js_Logo_2.svg" width="80" alt="Vue.js" style="border: none;"/>
+</a>
+&nbsp;&nbsp;&nbsp;
+<a href="https://nodejs.org/" style="text-decoration: none; border: none;">
+<img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg" width="100" alt="Node.js" style="border: none;"/>
+</a>
+
+<a href="https://golang.org" style="text-decoration: none; border: none;">
+ <img src="https://duckduckgo.com/i/77cac52781feeb4a.png" width="100" alt="Node.js" style="border: none;"/>
+</a>
 
 </div>
