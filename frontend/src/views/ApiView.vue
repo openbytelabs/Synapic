@@ -240,9 +240,9 @@
     }
   ],
   "total": 1,
-  "total_used": 15,      // Bugün kullanılan sorgu sayısı
-  "remaining": 85,       // Kalan sorgu hakkı
-  "daily_limit": 100     // Günlük limit
+  "total_used": 15,
+  "remaining": 85,
+  "daily_limit": 100
 }</pre>
             </div>
 
@@ -253,15 +253,15 @@
                 <span>API anahtarı eksik</span>
               </div>
               <div class="error-code-item">
-                <strong>Invalid or expired API key</strong>
-                <span>Geçersiz veya süresi dolmuş API anahtarı</span>
+                <strong>Invalid API key</strong>
+                <span>Geçersiz API anahtarı</span>
               </div>
               <div class="error-code-item">
-                <strong>Daily search limit exceeded</strong>
+                <strong>Daily limit exceeded</strong>
                 <span>Günlük arama limiti aşıldı (100 arama/gün)</span>
               </div>
               <div class="error-code-item">
-                <strong>Query parameter 'q' is required</strong>
+                <strong>Query required</strong>
                 <span>Sorgu parametresi eksik</span>
               </div>
             </div>
@@ -271,7 +271,7 @@
               <li>Günlük 100 arama hakkı (ücretsiz kullanıcılar)</li>
               <li>Her gece otomatik olarak sıfırlanır</li>
               <li>Master key sınırsız erişim sağlar</li>
-              <li>Rate limit: Dakikada maksimum 60 istek</li>
+              <li>Rate limit: 5 başarısız deneme = 15 dakika engelleme</li>
             </ul>
           </div>
         </div>
@@ -305,6 +305,8 @@ const testError = ref('');
 
 const usageData = ref([]);
 let statsInterval = null;
+
+const API_BASE = 'https://api.synapic.com.tr';
 
 const maskedApiKey = computed(() => {
   if (!apiKey.value) return '••••••••••••••••••••••••••••••••';
@@ -359,9 +361,13 @@ const fetchStats = async () => {
     const key = localStorage.getItem('apiKey');
     if (!key) return;
 
-    const response = await fetch('https://api.synapic.com.tr/user/stats', {
+    const response = await fetch(`${API_BASE}/user/stats`, {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
       headers: {
-        'X-API-Key': key
+        'X-API-Key': key,
+        'Content-Type': 'application/json'
       }
     });
 
@@ -374,6 +380,8 @@ const fetchStats = async () => {
       };
       
       updateUsageData();
+    } else if (response.status === 403) {
+      console.error('CORS error: Access denied');
     }
   } catch (error) {
     console.error('İstatistik alınamadı:', error);
@@ -388,17 +396,19 @@ const testApiSearch = async () => {
   testResponse.value = null;
 
   try {
-    const response = await fetch(`https://api.synapic.com.tr/api/search?q=${encodeURIComponent(testQuery.value)}&apikey=${apiKey.value}`);
+    const response = await fetch(`${API_BASE}/api/search?q=${encodeURIComponent(testQuery.value)}&apikey=${apiKey.value}`, {
+      method: 'GET',
+      mode: 'cors'
+    });
     
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error || errorData.message || 'Arama başarısız');
+      throw new Error(errorData.error || 'Arama başarısız');
     }
 
     const data = await response.json();
     testResponse.value = data;
     
-    // İstatistikleri güncelle
     await fetchStats();
   } catch (error) {
     testError.value = error.message;
@@ -426,9 +436,12 @@ const regenerateKey = async () => {
   }
 
   try {
-    const response = await fetch('https://api.synapic.com.tr//auth/regenerate', {
+    const response = await fetch(`${API_BASE}/auth/regenerate`, {
       method: 'POST',
+      mode: 'cors',
+      credentials: 'include',
       headers: {
+        'Content-Type': 'application/json',
         'X-API-Key': apiKey.value
       }
     });
@@ -515,8 +528,10 @@ const handleGoogleLogin = async () => {
           
           const userInfo = await userInfoResponse.json();
           
-          const backendResponse = await fetch('https://api.synapic.com.tr/auth/google', {
+          const backendResponse = await fetch(`${API_BASE}/auth/google`, {
             method: 'POST',
+            mode: 'cors',
+            credentials: 'include',
             headers: {
               'Content-Type': 'application/json',
             },
