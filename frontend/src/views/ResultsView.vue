@@ -138,12 +138,21 @@
             v-for="(result, index) in paginatedResults"
             :key="index"
             class="image-item"
+            :class="{ 'image-broken': brokenImages.has(index) }"
           >
-            <a :href="result.url" target="_blank">
-              <img :src="result.url" :alt="result.title" @error="handleImageLoadError" />
+            <a :href="result.url" target="_blank" rel="noopener noreferrer">
+              <img
+                :src="getImageSrc(result)"
+                :alt="result.title"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                crossorigin="anonymous"
+                @error="(e) => handleImageLoadError(e, index)"
+              />
             </a>
             <div class="image-info">
               <a :href="result.url" target="_blank" class="image-title">{{ result.title }}</a>
+              <span class="image-source">{{ getImageDomain(result.url) }}</span>
             </div>
           </div>
         </div>
@@ -410,6 +419,7 @@ const performSearch = async (forceType) => {
   aiLoading.value = false;
   currentPage.value = 1;
   activeMenu.value = null;
+  brokenImages.value = new Set();
 
   let fetchedResults = [];
   let shouldFetchAI = false;
@@ -468,10 +478,37 @@ const handleImageError = (event) => {
   event.target.src = 'https://www.google.com/s2/favicons?domain=example.com&sz=32';
 };
 
-const handleImageLoadError = (event) => {
-  event.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23333" width="200" height="200"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EImage Error%3C/text%3E%3C/svg%3E';
-  event.target.style.objectFit = 'contain';
-  event.target.style.backgroundColor = 'rgba(48, 52, 58, 0.8)';
+const brokenImages = ref(new Set());
+
+const IMAGE_EXTENSIONS = /\.(jpg|jpeg|png|gif|webp|svg|bmp|avif|tiff?)(\?.*)?$/i;
+
+const getImageSrc = (result) => {
+  if (result.description && IMAGE_EXTENSIONS.test(result.description.trim())) {
+    return result.description.trim();
+  }
+  if (IMAGE_EXTENSIONS.test(result.url)) {
+    return result.url;
+  }
+  try {
+    const u = new URL(result.url);
+    if (IMAGE_EXTENSIONS.test(u.pathname)) {
+      return result.url;
+    }
+  } catch {}
+  return result.url;
+};
+
+const getImageDomain = (url) => {
+  try {
+    return new URL(url).hostname.replace('www.', '');
+  } catch {
+    return '';
+  }
+};
+
+const handleImageLoadError = (event, index) => {
+  brokenImages.value = new Set([...brokenImages.value, index]);
+  event.target.closest('.image-item').style.display = 'none';
 };
 
 const toggleMenu = (index) => {
@@ -1153,6 +1190,20 @@ watch(() => route.query.q, (newQuery) => {
 .menu-option i {
   font-size: 13px;
   width: 14px;
+}
+
+.image-broken {
+  display: none !important;
+}
+
+.image-source {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+  margin-top: 2px;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .result-date {
