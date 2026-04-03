@@ -114,12 +114,27 @@
           ></iframe>
         </div>
 
-        <div v-if="searchType === 'image' && !isLoading" class="maintenance-container">
-          <div class="maintenance-card">
-            <i class="fa-solid fa-screwdriver-wrench maintenance-icon"></i>
-            <h2 class="maintenance-title">{{ t.search.maintenance }}</h2>
-            <p class="maintenance-desc">{{ t.search.maintenanceDesc }}</p>
-          </div>
+        <div v-if="searchType === 'image' && !isLoading && results.length > 0" class="image-grid">
+          <a
+            v-for="(result, index) in paginatedResults"
+            :key="index"
+            :href="result.url"
+            target="_blank"
+            class="image-item"
+            v-show="!brokenImages.has(index + (currentPage - 1) * resultsPerPage)"
+          >
+            <img
+              :src="getImageSrc(result)"
+              :alt="result.title"
+              class="image-thumb"
+              @error="handleImageLoadError($event, index + (currentPage - 1) * resultsPerPage)"
+              loading="lazy"
+            />
+            <div class="image-overlay">
+              <span class="image-title">{{ result.title }}</span>
+              <span class="image-source">{{ getImageDomain(result.url) }}</span>
+            </div>
+          </a>
         </div>
 
         <div v-if="searchType === 'web' && !isLoading">
@@ -234,8 +249,7 @@ const aiAnswer = ref('');
 const currentPage = ref(1);
 const noResultsVisible = ref(false);
 let noResultsTimer = null;
-const resultsPerPage = 10;
-
+const resultsPerPage = ref(10);
 
 const API_BASE_URL = 'https://api.synapic.com.tr';
 
@@ -244,11 +258,11 @@ const mapsUrl = computed(() => {
   return `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent(searchQuery.value)}`;
 });
 
-const totalPages = computed(() => Math.ceil(results.value.length / resultsPerPage));
+const totalPages = computed(() => Math.ceil(results.value.length / resultsPerPage.value));
 
 const paginatedResults = computed(() => {
-  const start = (currentPage.value - 1) * resultsPerPage;
-  return results.value.slice(start, start + resultsPerPage);
+  const start = (currentPage.value - 1) * resultsPerPage.value;
+  return results.value.slice(start, start + resultsPerPage.value);
 });
 
 const displayedPages = computed(() => {
@@ -277,6 +291,7 @@ const isYoutubeEmbed = (url) => url && url.includes('youtube.com/embed/');
 const changeSearchType = (type) => {
   if (searchType.value === type) return;
   searchType.value = type;
+  resultsPerPage.value = type === 'image' ? 30 : 10;
   if (searchQuery.value.trim()) performSearch(type);
 };
 
@@ -347,6 +362,7 @@ const performSearch = async (forceType) => {
   currentPage.value = 1;
   activeMenu.value = null;
   brokenImages.value = new Set();
+  resultsPerPage.value = currentType === 'image' ? 30 : 10;
 
   router.replace({ path: '/search', query: { q: query, type: currentType } });
 
@@ -412,7 +428,8 @@ const getImageDomain = (url) => {
 
 const handleImageLoadError = (event, index) => {
   brokenImages.value = new Set([...brokenImages.value, index]);
-  event.target.closest('.image-item').style.display = 'none';
+  const item = event.target.closest('.image-item');
+  if (item) item.style.display = 'none';
 };
 
 const toggleMenu = (index) => { activeMenu.value = activeMenu.value === index ? null : index; };
@@ -426,6 +443,7 @@ onMounted(async () => {
   if (queryParam) {
     searchQuery.value = queryParam;
     searchType.value = typeParam;
+    resultsPerPage.value = typeParam === 'image' ? 30 : 10;
     performSearch(typeParam);
   }
   document.addEventListener('click', (e) => {
@@ -438,6 +456,7 @@ watch(() => route.query.q, (newQuery) => {
     const typeParam = route.query.type || 'web';
     searchQuery.value = newQuery;
     searchType.value = typeParam;
+    resultsPerPage.value = typeParam === 'image' ? 30 : 10;
     performSearch(typeParam);
   }
 });
@@ -581,13 +600,40 @@ watch(() => route.query.q, (newQuery) => {
 .menu-option { width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: transparent; border: none; color: rgba(255,255,255,0.8); font-size: 14px; font-family: 'Inter', sans-serif; cursor: pointer; border-radius: 6px; transition: all 0.2s ease; text-align: left; }
 .menu-option:hover { background: rgba(255,255,255,0.08); }
 .result-date { font-size: 13px; color: rgba(255,255,255,0.5); margin: 0; line-height: 1.5; word-wrap: break-word; overflow-wrap: break-word; }
-.maintenance-container { display: flex; justify-content: center; align-items: center; padding: 60px 20px; }
-.maintenance-card { display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
-.maintenance-icon { font-size: 48px; color: rgba(212,175,55,0.6); }
-.maintenance-title { font-size: 24px; font-weight: 600; color: rgba(255,255,255,0.9); }
-.maintenance-desc { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.6; }
-.image-source { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.image-broken { display: none !important; }
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+.image-item {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  background: rgba(48,52,58,0.4);
+  border: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: block;
+}
+.image-item:hover { border-color: rgba(212,175,55,0.3); transform: scale(1.02); }
+.image-thumb {
+  width: 100%; height: 100%; object-fit: cover;
+  display: block; transition: transform 0.3s ease;
+}
+.image-item:hover .image-thumb { transform: scale(1.05); }
+.image-overlay {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.75));
+  padding: 20px 10px 8px;
+  opacity: 0; transition: opacity 0.3s ease;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.image-item:hover .image-overlay { opacity: 1; }
+.image-title { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.9); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.image-source { font-size: 11px; color: rgba(255,255,255,0.5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .loading-dots { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 60px 20px; }
 .loading-dots span { width: 12px; height: 12px; border-radius: 50%; background: #d4af37; display: inline-block; animation: bounce 1.2s ease-in-out infinite; }
 .loading-dots span:nth-child(1) { animation-delay: 0s; }
@@ -620,6 +666,7 @@ watch(() => route.query.q, (newQuery) => {
   .youtube-embed-wrapper iframe { height: 220px; }
   .pagination { gap: 6px; margin-top: 24px; }
   .pagination-button { min-width: 36px; height: 36px; font-size: 13px; }
+  .image-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
 }
 @media (max-width: 480px) {
   .menu-toggle-fixed { top: 16px; left: 16px; }
@@ -638,5 +685,6 @@ watch(() => route.query.q, (newQuery) => {
   .youtube-embed-wrapper iframe { height: 180px; }
   .pagination { gap: 4px; margin-top: 20px; }
   .pagination-button { min-width: 32px; height: 32px; font-size: 12px; padding: 0 8px; }
+  .image-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 6px; }
 }
 </style>
