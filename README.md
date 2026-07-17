@@ -4,7 +4,7 @@ Synapic, kullanıcı gizliliğini ön planda tutan, açık kaynak bir bağımsı
 arama motorudur. Go ve Vue.js ile geliştirilmiş olup, kendi arama
 indeksleme sistemine sahiptir.
 
-Şu anda sistemde **30 milyondan fazla indexlenmiş veri** bulunmaktadır
+Şu anda sistemde **50 milyondan fazla indexlenmiş veri** bulunmaktadır
 ve aktif olarak büyütülmektedir.
 
 ## Özellikler
